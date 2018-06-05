@@ -43,6 +43,7 @@ class ChunkedReadJob implements SelfHandling, ShouldQueue
      * @var bool
      */
     private $shouldQueue;
+    private $valueBinder;
 
     /**
      * ChunkedReadJob constructor.
@@ -62,7 +63,8 @@ class ChunkedReadJob implements SelfHandling, ShouldQueue
         $startIndex,
         $chunkSize,
         callable $callback,
-        $shouldQueue = true
+        $shouldQueue = true,
+        $valueBinder = null
     ) {
         $this->startRow   = $startRow;
         $this->chunkSize  = $chunkSize;
@@ -72,6 +74,7 @@ class ChunkedReadJob implements SelfHandling, ShouldQueue
         $this->callback    = $shouldQueue ? (new Serializer)->serialize($callback) : $callback;
         $this->sheets      = $sheets;
         $this->shouldQueue = $shouldQueue;
+        $this->valueBinder = $valueBinder;
     }
 
     /***
@@ -84,6 +87,11 @@ class ChunkedReadJob implements SelfHandling, ShouldQueue
         $reader->_init($this->file);
 
         $filter = new ChunkReadFilter();
+
+        if (!empty($this->valueBinder)) {
+            \PHPExcel_Cell::setValueBinder($this->valueBinder);
+        }
+
         $reader->reader->setLoadSheetsOnly($this->sheets);
         $reader->reader->setReadFilter($filter);
         $reader->reader->setReadDataOnly(true);

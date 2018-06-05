@@ -226,6 +226,8 @@ class LaravelExcelReader
      */
     protected $dispatcher;
 
+    private $binder;
+
     /**
      * Construct new reader
      *
@@ -570,7 +572,8 @@ class LaravelExcelReader
                 $startIndex,
                 $chunkSize,
                 $callback,
-                $shouldQueue
+                $shouldQueue,
+                $this->binder
             );
 
             if ($shouldQueue) {
@@ -782,6 +785,7 @@ class LaravelExcelReader
      */
     public function setValueBinder(PHPExcel_Cell_IValueBinder $binder)
     {
+        $this->binder = $binder;
         PHPExcel_Cell::setValueBinder($binder);
 
         return $this;
