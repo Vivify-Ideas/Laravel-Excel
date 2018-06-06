@@ -1270,4 +1270,11 @@ class LaravelExcelWorksheet extends PHPExcel_Worksheet {
             ? $this->getCell($currentColumn . $startRow)->setValueExplicit($cellValue)
             : $this->getCell($currentColumn . $startRow)->setValue($cellValue);
     }
+
+    public function setValueBinder($binder)
+    {
+        \PHPExcel_Cell::setValueBinder($binder);
+
+        return $this;
+    }
 }
