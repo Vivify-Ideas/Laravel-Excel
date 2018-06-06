@@ -275,4 +275,11 @@ class Excel {
 
         throw new LaravelExcelException('Laravel Excel method [' . $method . '] does not exist');
     }
+
+    public function setValueBinder($binder)
+    {
+        \PHPExcel_Cell::setValueBinder($binder);
+
+        return $this;
+    }
 }
